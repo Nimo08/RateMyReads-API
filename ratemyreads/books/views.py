@@ -34,7 +34,7 @@ class CommentListCreateAPIView(generics.ListCreateAPIView):
         comment = serializer.save()
 
         # Send email notification to the current user
-        if self.request.user.is_authenticated and self.request.user.id != comment.user_id: # Check if the current user is not the author of the comment
+        if self.request.user.is_authenticated and self.request.user.id != comment.user: # Check if the current user is not the author of the comment
             subject = 'New Comment Notification'
             context = {'comment': comment}
             html_message = render_to_string('comment_notification_email.html', context)
@@ -55,7 +55,7 @@ class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
         instance = serializer.save()
 
         # Send email notification to the current user if the comment is updated
-        if self.request.user.id != instance.user.id:  # Check if the current user is not the author of the comment
+        if self.request.user.id != instance.user:  # Check if the current user is not the author of the comment
             subject = 'Comment Updated Notification'
             context = {'comment': instance}
             html_message = render_to_string('comment_notification_email.html', context)
